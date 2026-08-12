@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ResiNode - Premium Residential VPS Hosting</title>
+    
+    <meta name="description" content="High-performance Residential VPS and Dedicated Physical Machines. Fast, secure, and genuine static Residential IPs.">
+    <meta name="keywords" content="ResiNode, Residential VPS, RDP, USA VPS, Clean IP, static IP hosting, anonymous VPS">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            900: '#1e3a8a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #f8fafc;
+            color: #0f172a;
+            transition: background-color 0.2s, color 0.2s;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        html.dark body {
+            background-color: #0f172a;
+            color: #f1f5f9;
+        }
+
+        /* Clean Flat UI Components */
+        .header-nav {
+            background-color: #ffffff;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        html.dark .header-nav {
+            background-color: #1e293b;
+            border-bottom: 1px solid #334155;
+        }
+
+        .flat-card {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s;
+        }
+
+        .flat-card:hover {
+            border-color: #3b82f6;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            transform: translateY(-4px);
+        }
+
+        html.dark .flat-card {
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            box-shadow: none;
+        }
+
+        html.dark .flat-card:hover {
+            border-color: #3b82f6;
+        }
+
+        .nav-link {
+            font-weight: 500;
+            color: #64748b;
+            transition: color 0.2s;
+        }
+        .nav-link:hover, .nav-link.active {
+            color: #2563eb;
+        }
+        html.dark .nav-link {
+            color: #94a3b8;
+        }
+        html.dark .nav-link:hover, html.dark .nav-link.active {
+            color: #60a5fa;
+        }
+
+        /* Flat Tab Buttons */
+        .tab-btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.375rem;
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+        .tab-inactive {
+            background-color: #f1f5f9;
+            color: #475569;
+            border-color: #e2e8f0;
+        }
+        .tab-inactive:hover {
+            background-color: #e2e8f0;
+        }
+        html.dark .tab-inactive {
+            background-color: #334155;
+            color: #cbd5e1;
+            border-color: #475569;
+        }
+        html.dark .tab-inactive:hover {
+            background-color: #475569;
+        }
+        .tab-active {
+            background-color: #2563eb;
+            color: #ffffff;
+            border-color: #2563eb;
+        }
+
+        /* Base Utilities */
+        .hidden-section { display: none; }
+        main { flex: 1; padding-top: 80px; }
+        
+        .btn-primary {
+            background-color: #2563eb;
+            color: white;
+            border-radius: 0.375rem;
+            font-weight: 600;
+            transition: background-color 0.2s;
+        }
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <script>
+        if (localStorage.getItem('theme') === 'dark') {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 header-nav">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <a href="#" onclick="switchPage('home'); return false;" class="flex items-center gap-2">
+                    <div class="w-8 h-8 bg-brand-600 rounded flex items-center justify-center text-white font-bold">
+                        <i class="fas fa-network-wired text-sm"></i>
+                    </div>
+                    <span class="text-xl font-bold tracking-tight text-slate-900 dark:text-white">Resi<span class="text-brand-600 dark:text-brand-500">Node</span></span>
+                </a>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="#" onclick="switchPage('home'); return false;" id="nav-home" class="nav-link">Overview</a>
+                    <a href="#" onclick="switchPage('products'); return false;" id="nav-products" class="nav-link">Residential VPS Plans</a>
+                    <a href="#" onclick="switchPage('contact'); return false;" id="nav-contact" class="nav-link">Support</a>
+                </div>
+
+                <!-- Utilities -->
+                <div class="flex items-center gap-4">
+                    <button onclick="toggleTheme()" class="text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white transition-colors" title="Toggle Theme">
+                        <i id="theme-icon" class="fas fa-moon text-lg"></i>
+                    </button>
+                    <div class="md:hidden">
+                        <button onclick="toggleMobileMenu()" class="text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white">
+                            <i class="fas fa-bars text-xl"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
+            <div class="px-4 py-2 space-y-1">
+                <a href="#" onclick="switchPage('home'); toggleMobileMenu(); return false;" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700">Overview</a>
+                <a href="#" onclick="switchPage('products'); toggleMobileMenu(); return false;" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700">Residential VPS Plans</a>
+                <a href="#" onclick="switchPage('contact'); toggleMobileMenu(); return false;" class="block px-3 py-2 rounded-md text-base font-medium text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-700">Support</a>
+            </div>
+        </div>
+    </nav>
+
+    <main id="content-area">
+        <!-- Home Section -->
+        <section id="home" class="page-view relative pt-24 px-4 pb-20">
+            <div class="max-w-4xl mx-auto text-center mb-20">
+                <h1 class="text-5xl md:text-6xl font-bold mb-6 text-slate-900 dark:text-white tracking-tight">
+                    Enterprise-Grade <br class="hidden md:block" />
+                    <span class="text-brand-600 dark:text-brand-500">Residential VPS Hosting</span>
+                </h1>
+                <p class="text-lg md:text-xl text-slate-600 dark:text-slate-400 mb-10 leading-relaxed">
+                    Deploy authentic Residential VPS instances instantly. Engineered for survey operations, secure browsing, automated workflows, and absolute network anonymity with zero IP flagging.
+                </p>
+                <button onclick="switchPage('products')" class="btn-primary px-8 py-3 text-lg">
+                    View Residential VPS Plans
+                </button>
+            </div>
+
+            <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="flat-card p-6">
+                    <i class="fas fa-bolt text-brand-600 text-3xl mb-4"></i>
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Instant VPS Provisioning</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm">Automated deployment gets your Residential VPS online in under 60 seconds.</p>
+                </div>
+                <div class="flat-card p-6">
+                    <i class="fas fa-shield-alt text-brand-600 text-3xl mb-4"></i>
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Pristine Static IPs</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm">Legitimate ISP-assigned residential addresses ensuring zero flags on target platforms.</p>
+                </div>
+                <div class="flat-card p-6">
+                    <i class="fas fa-server text-brand-600 text-3xl mb-4"></i>
+                    <h3 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Dedicated Uplinks</h3>
+                    <p class="text-slate-600 dark:text-slate-400 text-sm">1Gbps unmetered bandwidth capabilities for uninterrupted heavy VPS workloads.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Products Section -->
+        <section id="products" class="page-view hidden-section py-16">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-bold mb-4 text-slate-900 dark:text-white">Choose Your Residential VPS Plan</h2>
+                    <p class="text-slate-600 dark:text-slate-400">Select a region and package to fit your specifications.</p>
+                </div>
+
+                <!-- Tabs -->
+                <div class="flex justify-center gap-3 mb-12 flex-wrap">
+                    <button onclick="toggleProductTab('us')" id="tab-us" class="tab-btn tab-active">US Residential VPS</button>
+                    <button onclick="toggleProductTab('uk')" id="tab-uk" class="tab-btn tab-inactive">UK Residential VPS</button>
+                    <button onclick="toggleProductTab('au')" id="tab-au" class="tab-btn tab-inactive">Australia Residential VPS</button>
+                    <button onclick="toggleProductTab('ca')" id="tab-ca" class="tab-btn tab-inactive">Canada Residential VPS</button>
+                    <button onclick="toggleProductTab('fr')" id="tab-fr" class="tab-btn tab-inactive">France Residential VPS</button>
+                    <button onclick="toggleProductTab('de')" id="tab-de" class="tab-btn tab-inactive">Germany Residential VPS</button>
+                    <button onclick="toggleProductTab('es')" id="tab-es" class="tab-btn tab-inactive">Spain Residential VPS</button>
+                    <button onclick="toggleProductTab('physical')" id="tab-physical" class="tab-btn tab-inactive border-brand-600">US Physical Machine</button>
+                </div>
+
+                <!-- UNITED STATES -->
+                <div id="product-us" class="product-group">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+                        <div class="flat-card p-8 flex flex-col">
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-1">Basic VPS</h3>
+                            <p class="text-sm text-slate-500 mb-6">Entry-level tasks</p>
+                            <div class="mb-6"><span class="text-4xl font-bold text-slate-900 dark:text-white">$20</span><span class="text-slate-500">/mo</span></div>
+                            <ul class="space-y-3 mb-8 text-slate-600 dark:text-slate-300 text-sm flex-1">
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>CPU: 2 Cores</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>RAM: 2GB</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>Storage: 40GB NVMe</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>Network: 1Gbps</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>1 US Residential IP</li>
+                            </ul>
+                            <a href="https://t.me/ResiNode" target="_blank" class="w-full block text-center btn-primary py-2">Order Now</a>
+                        </div>
+                        <div class="flat-card p-8 flex flex-col border-brand-500 relative">
+                            <div class="absolute top-0 right-0 bg-brand-600 text-white text-xs font-bold px-3 py-1 rounded-bl-lg rounded-tr-md">15% OFF</div>
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-1">Starter VPS</h3>
+                            <p class="text-sm text-slate-500 mb-6">Standard operations</p>
+                            <div class="mb-6">
+                                <span class="line-through text-slate-400 text-lg mr-2">$40</span>
+                                <span class="text-4xl font-bold text-slate-900 dark:text-white">$34</span><span class="text-slate-500">/mo</span>
+                            </div>
+                            <ul class="space-y-3 mb-8 text-slate-600 dark:text-slate-300 text-sm flex-1">
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>CPU: 4 Cores</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>RAM: 4GB</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>Storage: 60GB NVMe</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>Network: 1Gbps</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>1 US Residential IP</li>
+                            </ul>
+                            <a href="https://t.me/ResiNode" target="_blank" class="w-full block text-center btn-primary py-2">Order Now</a>
+                        </div>
+                        <div class="flat-card p-8 flex flex-col relative">
+                            <div class="absolute top-0 right-0 bg-brand-600 text-white text-xs font-bold px-3 py-1 rounded-bl-lg rounded-tr-md">15% OFF</div>
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-1">Professional VPS</h3>
+                            <p class="text-sm text-slate-500 mb-6">Heavy workloads</p>
+                            <div class="mb-6">
+                                <span class="line-through text-slate-400 text-lg mr-2">$80</span>
+                                <span class="text-4xl font-bold text-slate-900 dark:text-white">$68</span><span class="text-slate-500">/mo</span>
+                            </div>
+                            <ul class="space-y-3 mb-8 text-slate-600 dark:text-slate-300 text-sm flex-1">
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>CPU: 8 Cores</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>RAM: 8GB</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>Storage: 100GB NVMe</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>Network: 1Gbps</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>1 US Residential IP</li>
+                            </ul>
+                            <a href="https://t.me/ResiNode" target="_blank" class="w-full block text-center btn-primary py-2">Order Now</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- UNITED KINGDOM -->
+                <div id="product-uk" class="product-group hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+                        <div class="flat-card p-8 flex flex-col">
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-1">Basic VPS</h3>
+                            <p class="text-sm text-slate-500 mb-6">Entry-level tasks</p>
+                            <div class="mb-6"><span class="text-4xl font-bold text-slate-900 dark:text-white">$20</span><span class="text-slate-500">/mo</span></div>
+                            <ul class="space-y-3 mb-8 text-slate-600 dark:text-slate-300 text-sm flex-1">
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>CPU: 2 Cores</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>RAM: 2GB</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>Storage: 40GB NVMe</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>Network: 1Gbps</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>1 UK Residential IP</li>
+                            </ul>
+                            <a href="https://t.me/ResiNode" target="_blank" class="w-full block text-center btn-primary py-2">Order Now</a>
+                        </div>
+                        <div class="flat-card p-8 flex flex-col border-brand-500 relative">
+                            <div class="absolute top-0 right-0 bg-brand-600 text-white text-xs font-bold px-3 py-1 rounded-bl-lg rounded-tr-md">15% OFF</div>
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-1">Starter VPS</h3>
+                            <p class="text-sm text-slate-500 mb-6">Standard operations</p>
+                            <div class="mb-6">
+                                <span class="line-through text-slate-400 text-lg mr-2">$40</span>
+                                <span class="text-4xl font-bold text-slate-900 dark:text-white">$34</span><span class="text-slate-500">/mo</span>
+                            </div>
+                            <ul class="space-y-3 mb-8 text-slate-600 dark:text-slate-300 text-sm flex-1">
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>CPU: 4 Cores</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>RAM: 4GB</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>Storage: 60GB NVMe</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>Network: 1Gbps</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>1 UK Residential IP</li>
+                            </ul>
+                            <a href="https://t.me/ResiNode" target="_blank" class="w-full block text-center btn-primary py-2">Order Now</a>
+                        </div>
+                        <div class="flat-card p-8 flex flex-col relative">
+                            <div class="absolute top-0 right-0 bg-brand-600 text-white text-xs font-bold px-3 py-1 rounded-bl-lg rounded-tr-md">15% OFF</div>
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-1">Professional VPS</h3>
+                            <p class="text-sm text-slate-500 mb-6">Heavy workloads</p>
+                            <div class="mb-6">
+                                <span class="line-through text-slate-400 text-lg mr-2">$80</span>
+                                <span class="text-4xl font-bold text-slate-900 dark:text-white">$68</span><span class="text-slate-500">/mo</span>
+                            </div>
+                            <ul class="space-y-3 mb-8 text-slate-600 dark:text-slate-300 text-sm flex-1">
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>CPU: 8 Cores</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>RAM: 8GB</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>Storage: 100GB NVMe</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>Network: 1Gbps</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>1 UK Residential IP</li>
+                            </ul>
+                            <a href="https://t.me/ResiNode" target="_blank" class="w-full block text-center btn-primary py-2">Order Now</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- AUSTRALIA -->
+                <div id="product-au" class="product-group hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+                        <div class="flat-card p-8 flex flex-col">
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-1">Basic VPS</h3>
+                            <p class="text-sm text-slate-500 mb-6">Entry-level tasks</p>
+                            <div class="mb-6"><span class="text-4xl font-bold text-slate-900 dark:text-white">$20</span><span class="text-slate-500">/mo</span></div>
+                            <ul class="space-y-3 mb-8 text-slate-600 dark:text-slate-300 text-sm flex-1">
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>CPU: 2 Cores</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>RAM: 2GB</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>Storage: 40GB NVMe</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>Network: 1Gbps</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>1 Australia Residential IP</li>
+                            </ul>
+                            <a href="https://t.me/ResiNode" target="_blank" class="w-full block text-center btn-primary py-2">Order Now</a>
+                        </div>
+                        <div class="flat-card p-8 flex flex-col border-brand-500 relative">
+                            <div class="absolute top-0 right-0 bg-brand-600 text-white text-xs font-bold px-3 py-1 rounded-bl-lg rounded-tr-md">15% OFF</div>
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-1">Starter VPS</h3>
+                            <p class="text-sm text-slate-500 mb-6">Standard operations</p>
+                            <div class="mb-6">
+                                <span class="line-through text-slate-400 text-lg mr-2">$40</span>
+                                <span class="text-4xl font-bold text-slate-900 dark:text-white">$34</span><span class="text-slate-500">/mo</span>
+                            </div>
+                            <ul class="space-y-3 mb-8 text-slate-600 dark:text-slate-300 text-sm flex-1">
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>CPU: 4 Cores</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>RAM: 4GB</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>Storage: 60GB NVMe</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>Network: 1Gbps</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>1 Australia Residential IP</li>
+                            </ul>
+                            <a href="https://t.me/ResiNode" target="_blank" class="w-full block text-center btn-primary py-2">Order Now</a>
+                        </div>
+                        <div class="flat-card p-8 flex flex-col relative">
+                            <div class="absolute top-0 right-0 bg-brand-600 text-white text-xs font-bold px-3 py-1 rounded-bl-lg rounded-tr-md">15% OFF</div>
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-1">Professional VPS</h3>
+                            <p class="text-sm text-slate-500 mb-6">Heavy workloads</p>
+                            <div class="mb-6">
+                                <span class="line-through text-slate-400 text-lg mr-2">$80</span>
+                                <span class="text-4xl font-bold text-slate-900 dark:text-white">$68</span><span class="text-slate-500">/mo</span>
+                            </div>
+                            <ul class="space-y-3 mb-8 text-slate-600 dark:text-slate-300 text-sm flex-1">
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>CPU: 8 Cores</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>RAM: 8GB</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>Storage: 100GB NVMe</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>Network: 1Gbps</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>1 Australia Residential IP</li>
+                            </ul>
+                            <a href="https://t.me/ResiNode" target="_blank" class="w-full block text-center btn-primary py-2">Order Now</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CANADA -->
+                <div id="product-ca" class="product-group hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+                        <div class="flat-card p-8 flex flex-col">
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-1">Basic VPS</h3>
+                            <p class="text-sm text-slate-500 mb-6">Entry-level tasks</p>
+                            <div class="mb-6"><span class="text-4xl font-bold text-slate-900 dark:text-white">$20</span><span class="text-slate-500">/mo</span></div>
+                            <ul class="space-y-3 mb-8 text-slate-600 dark:text-slate-300 text-sm flex-1">
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>CPU: 2 Cores</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>RAM: 2GB</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>Storage: 40GB NVMe</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>Network: 1Gbps</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>1 Canada Residential IP</li>
+                            </ul>
+                            <a href="https://t.me/ResiNode" target="_blank" class="w-full block text-center btn-primary py-2">Order Now</a>
+                        </div>
+                        <div class="flat-card p-8 flex flex-col border-brand-500 relative">
+                            <div class="absolute top-0 right-0 bg-brand-600 text-white text-xs font-bold px-3 py-1 rounded-bl-lg rounded-tr-md">15% OFF</div>
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-1">Starter VPS</h3>
+                            <p class="text-sm text-slate-500 mb-6">Standard operations</p>
+                            <div class="mb-6">
+                                <span class="line-through text-slate-400 text-lg mr-2">$40</span>
+                                <span class="text-4xl font-bold text-slate-900 dark:text-white">$34</span><span class="text-slate-500">/mo</span>
+                            </div>
+                            <ul class="space-y-3 mb-8 text-slate-600 dark:text-slate-300 text-sm flex-1">
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>CPU: 4 Cores</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>RAM: 4GB</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>Storage: 60GB NVMe</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>Network: 1Gbps</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>1 Canada Residential IP</li>
+                            </ul>
+                            <a href="https://t.me/ResiNode" target="_blank" class="w-full block text-center btn-primary py-2">Order Now</a>
+                        </div>
+                        <div class="flat-card p-8 flex flex-col relative">
+                            <div class="absolute top-0 right-0 bg-brand-600 text-white text-xs font-bold px-3 py-1 rounded-bl-lg rounded-tr-md">15% OFF</div>
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-1">Professional VPS</h3>
+                            <p class="text-sm text-slate-500 mb-6">Heavy workloads</p>
+                            <div class="mb-6">
+                                <span class="line-through text-slate-400 text-lg mr-2">$80</span>
+                                <span class="text-4xl font-bold text-slate-900 dark:text-white">$68</span><span class="text-slate-500">/mo</span>
+                            </div>
+                            <ul class="space-y-3 mb-8 text-slate-600 dark:text-slate-300 text-sm flex-1">
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>CPU: 8 Cores</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>RAM: 8GB</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>Storage: 100GB NVMe</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>Network: 1Gbps</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>1 Canada Residential IP</li>
+                            </ul>
+                            <a href="https://t.me/ResiNode" target="_blank" class="w-full block text-center btn-primary py-2">Order Now</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FRANCE -->
+                <div id="product-fr" class="product-group hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+                        <div class="flat-card p-8 flex flex-col">
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-1">Basic VPS</h3>
+                            <p class="text-sm text-slate-500 mb-6">Entry-level tasks</p>
+                            <div class="mb-6"><span class="text-4xl font-bold text-slate-900 dark:text-white">$20</span><span class="text-slate-500">/mo</span></div>
+                            <ul class="space-y-3 mb-8 text-slate-600 dark:text-slate-300 text-sm flex-1">
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>CPU: 2 Cores</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>RAM: 2GB</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>Storage: 40GB NVMe</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>Network: 1Gbps</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>1 France Residential IP</li>
+                            </ul>
+                            <a href="https://t.me/ResiNode" target="_blank" class="w-full block text-center btn-primary py-2">Order Now</a>
+                        </div>
+                        <div class="flat-card p-8 flex flex-col border-brand-500 relative">
+                            <div class="absolute top-0 right-0 bg-brand-600 text-white text-xs font-bold px-3 py-1 rounded-bl-lg rounded-tr-md">15% OFF</div>
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-1">Starter VPS</h3>
+                            <p class="text-sm text-slate-500 mb-6">Standard operations</p>
+                            <div class="mb-6">
+                                <span class="line-through text-slate-400 text-lg mr-2">$40</span>
+                                <span class="text-4xl font-bold text-slate-900 dark:text-white">$34</span><span class="text-slate-500">/mo</span>
+                            </div>
+                            <ul class="space-y-3 mb-8 text-slate-600 dark:text-slate-300 text-sm flex-1">
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>CPU: 4 Cores</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>RAM: 4GB</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>Storage: 60GB NVMe</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>Network: 1Gbps</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>1 France Residential IP</li>
+                            </ul>
+                            <a href="https://t.me/ResiNode" target="_blank" class="w-full block text-center btn-primary py-2">Order Now</a>
+                        </div>
+                        <div class="flat-card p-8 flex flex-col relative">
+                            <div class="absolute top-0 right-0 bg-brand-600 text-white text-xs font-bold px-3 py-1 rounded-bl-lg rounded-tr-md">15% OFF</div>
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-1">Professional VPS</h3>
+                            <p class="text-sm text-slate-500 mb-6">Heavy workloads</p>
+                            <div class="mb-6">
+                                <span class="line-through text-slate-400 text-lg mr-2">$80</span>
+                                <span class="text-4xl font-bold text-slate-900 dark:text-white">$68</span><span class="text-slate-500">/mo</span>
+                            </div>
+                            <ul class="space-y-3 mb-8 text-slate-600 dark:text-slate-300 text-sm flex-1">
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>CPU: 8 Cores</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>RAM: 8GB</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>Storage: 100GB NVMe</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>Network: 1Gbps</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>1 France Residential IP</li>
+                            </ul>
+                            <a href="https://t.me/ResiNode" target="_blank" class="w-full block text-center btn-primary py-2">Order Now</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GERMANY -->
+                <div id="product-de" class="product-group hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+                        <div class="flat-card p-8 flex flex-col">
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-1">Basic VPS</h3>
+                            <p class="text-sm text-slate-500 mb-6">Entry-level tasks</p>
+                            <div class="mb-6"><span class="text-4xl font-bold text-slate-900 dark:text-white">$20</span><span class="text-slate-500">/mo</span></div>
+                            <ul class="space-y-3 mb-8 text-slate-600 dark:text-slate-300 text-sm flex-1">
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>CPU: 2 Cores</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>RAM: 2GB</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>Storage: 40GB NVMe</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>Network: 1Gbps</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>1 Germany Residential IP</li>
+                            </ul>
+                            <a href="https://t.me/ResiNode" target="_blank" class="w-full block text-center btn-primary py-2">Order Now</a>
+                        </div>
+                        <div class="flat-card p-8 flex flex-col border-brand-500 relative">
+                            <div class="absolute top-0 right-0 bg-brand-600 text-white text-xs font-bold px-3 py-1 rounded-bl-lg rounded-tr-md">15% OFF</div>
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-1">Starter VPS</h3>
+                            <p class="text-sm text-slate-500 mb-6">Standard operations</p>
+                            <div class="mb-6">
+                                <span class="line-through text-slate-400 text-lg mr-2">$40</span>
+                                <span class="text-4xl font-bold text-slate-900 dark:text-white">$34</span><span class="text-slate-500">/mo</span>
+                            </div>
+                            <ul class="space-y-3 mb-8 text-slate-600 dark:text-slate-300 text-sm flex-1">
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>CPU: 4 Cores</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>RAM: 4GB</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>Storage: 60GB NVMe</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>Network: 1Gbps</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>1 Germany Residential IP</li>
+                            </ul>
+                            <a href="https://t.me/ResiNode" target="_blank" class="w-full block text-center btn-primary py-2">Order Now</a>
+                        </div>
+                        <div class="flat-card p-8 flex flex-col relative">
+                            <div class="absolute top-0 right-0 bg-brand-600 text-white text-xs font-bold px-3 py-1 rounded-bl-lg rounded-tr-md">15% OFF</div>
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-1">Professional VPS</h3>
+                            <p class="text-sm text-slate-500 mb-6">Heavy workloads</p>
+                            <div class="mb-6">
+                                <span class="line-through text-slate-400 text-lg mr-2">$80</span>
+                                <span class="text-4xl font-bold text-slate-900 dark:text-white">$68</span><span class="text-slate-500">/mo</span>
+                            </div>
+                            <ul class="space-y-3 mb-8 text-slate-600 dark:text-slate-300 text-sm flex-1">
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>CPU: 8 Cores</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>RAM: 8GB</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>Storage: 100GB NVMe</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>Network: 1Gbps</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>1 Germany Residential IP</li>
+                            </ul>
+                            <a href="https://t.me/ResiNode" target="_blank" class="w-full block text-center btn-primary py-2">Order Now</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SPAIN -->
+                <div id="product-es" class="product-group hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+                        <div class="flat-card p-8 flex flex-col">
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-1">Basic VPS</h3>
+                            <p class="text-sm text-slate-500 mb-6">Entry-level tasks</p>
+                            <div class="mb-6"><span class="text-4xl font-bold text-slate-900 dark:text-white">$20</span><span class="text-slate-500">/mo</span></div>
+                            <ul class="space-y-3 mb-8 text-slate-600 dark:text-slate-300 text-sm flex-1">
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>CPU: 2 Cores</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>RAM: 2GB</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>Storage: 40GB NVMe</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>Network: 1Gbps</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>1 Spain Residential IP</li>
+                            </ul>
+                            <a href="https://t.me/ResiNode" target="_blank" class="w-full block text-center btn-primary py-2">Order Now</a>
+                        </div>
+                        <div class="flat-card p-8 flex flex-col border-brand-500 relative">
+                            <div class="absolute top-0 right-0 bg-brand-600 text-white text-xs font-bold px-3 py-1 rounded-bl-lg rounded-tr-md">15% OFF</div>
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-1">Starter VPS</h3>
+                            <p class="text-sm text-slate-500 mb-6">Standard operations</p>
+                            <div class="mb-6">
+                                <span class="line-through text-slate-400 text-lg mr-2">$40</span>
+                                <span class="text-4xl font-bold text-slate-900 dark:text-white">$34</span><span class="text-slate-500">/mo</span>
+                            </div>
+                            <ul class="space-y-3 mb-8 text-slate-600 dark:text-slate-300 text-sm flex-1">
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>CPU: 4 Cores</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>RAM: 4GB</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>Storage: 60GB NVMe</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>Network: 1Gbps</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>1 Spain Residential IP</li>
+                            </ul>
+                            <a href="https://t.me/ResiNode" target="_blank" class="w-full block text-center btn-primary py-2">Order Now</a>
+                        </div>
+                        <div class="flat-card p-8 flex flex-col relative">
+                            <div class="absolute top-0 right-0 bg-brand-600 text-white text-xs font-bold px-3 py-1 rounded-bl-lg rounded-tr-md">15% OFF</div>
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-1">Professional VPS</h3>
+                            <p class="text-sm text-slate-500 mb-6">Heavy workloads</p>
+                            <div class="mb-6">
+                                <span class="line-through text-slate-400 text-lg mr-2">$80</span>
+                                <span class="text-4xl font-bold text-slate-900 dark:text-white">$68</span><span class="text-slate-500">/mo</span>
+                            </div>
+                            <ul class="space-y-3 mb-8 text-slate-600 dark:text-slate-300 text-sm flex-1">
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>CPU: 8 Cores</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>RAM: 8GB</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>Storage: 100GB NVMe</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>Network: 1Gbps</li>
+                                <li><i class="fas fa-check text-brand-600 mr-2"></i>1 Spain Residential IP</li>
+                            </ul>
+                            <a href="https://t.me/ResiNode" target="_blank" class="w-full block text-center btn-primary py-2">Order Now</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- US PHYSICAL (Unchanged Prices) -->
+                <div id="product-physical" class="product-group hidden">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+                        <div class="flat-card p-8 flex flex-col">
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-1">STARTER</h3>
+                            <p class="text-sm text-slate-500 mb-6">Dedicated US Hardware</p>
+                            <div class="mb-6"><span class="text-4xl font-bold text-slate-900 dark:text-white">$150</span><span class="text-slate-500">/mo</span></div>
+                            <ul class="space-y-3 mb-8 text-slate-600 dark:text-slate-300 text-sm flex-1">
+                                <li><i class="fas fa-microchip text-brand-600 mr-2"></i>Intel® Xeon® E3-1230 v5</li>
+                                <li><i class="fas fa-memory text-brand-600 mr-2"></i>16GB RAM</li>
+                                <li><i class="fas fa-hdd text-brand-600 mr-2"></i>256GB NVMe</li>
+                                <li><i class="fas fa-network-wired text-brand-600 mr-2"></i>100Mbps Port</li>
+                                <li><i class="fas fa-globe text-brand-600 mr-2"></i>4 Residential IPv4</li>
+                            </ul>
+                            <a href="https://t.me/ResiNode" target="_blank" class="w-full block text-center btn-primary py-2">Order Now</a>
+                        </div>
+                        <div class="flat-card p-8 flex flex-col border-brand-500 relative">
+                            <div class="absolute top-0 right-0 bg-brand-600 text-white text-xs font-bold px-3 py-1 rounded-bl-lg rounded-tr-md">POPULAR</div>
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-1">PRO</h3>
+                            <p class="text-sm text-slate-500 mb-6">Dedicated US Hardware</p>
+                            <div class="mb-6"><span class="text-4xl font-bold text-slate-900 dark:text-white">$550</span><span class="text-slate-500">/mo</span></div>
+                            <ul class="space-y-3 mb-8 text-slate-600 dark:text-slate-300 text-sm flex-1">
+                                <li><i class="fas fa-microchip text-brand-600 mr-2"></i>Intel® Xeon® E3-1230 v5</li>
+                                <li><i class="fas fa-memory text-brand-600 mr-2"></i>16GB RAM</li>
+                                <li><i class="fas fa-hdd text-brand-600 mr-2"></i>256GB NVMe</li>
+                                <li><i class="fas fa-network-wired text-brand-600 mr-2"></i>1Gbps Port</li>
+                                <li><i class="fas fa-globe text-brand-600 mr-2"></i>254 Residential IPv4</li>
+                            </ul>
+                            <a href="https://t.me/ResiNode" target="_blank" class="w-full block text-center btn-primary py-2">Order Now</a>
+                        </div>
+                        <div class="flat-card p-8 flex flex-col">
+                            <h3 class="text-xl font-bold text-slate-900 dark:text-white mb-1">ELITE</h3>
+                            <p class="text-sm text-slate-500 mb-6">Dedicated US Hardware</p>
+                            <div class="mb-6"><span class="text-4xl font-bold text-slate-900 dark:text-white">$999</span><span class="text-slate-500">/mo</span></div>
+                            <ul class="space-y-3 mb-8 text-slate-600 dark:text-slate-300 text-sm flex-1">
+                                <li><i class="fas fa-microchip text-brand-600 mr-2"></i>Intel® Xeon® E5-2680 v4</li>
+                                <li><i class="fas fa-memory text-brand-600 mr-2"></i>256GB RAM</li>
+                                <li><i class="fas fa-hdd text-brand-600 mr-2"></i>4TB NVMe</li>
+                                <li><i class="fas fa-network-wired text-brand-600 mr-2"></i>1Gbps Port</li>
+                                <li><i class="fas fa-globe text-brand-600 mr-2"></i>254 Residential IPv4</li>
+                            </ul>
+                            <a href="https://t.me/ResiNode" target="_blank" class="w-full block text-center btn-primary py-2">Order Now</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="page-view hidden-section py-20 flex items-center justify-center min-h-[60vh]">
+            <div class="max-w-2xl mx-auto px-4 w-full">
+                <div class="flat-card p-10 text-center">
+                    <i class="fab fa-telegram text-5xl text-brand-500 mb-4"></i>
+                    <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-2">Technical Support for your VPS</h3>
+                    <p class="text-slate-600 dark:text-slate-400 mb-8">
+                        Need Residential VPS deployment assistance or custom hardware configurations?<br>
+                        Reach out to our engineering team on Telegram.
+                    </p>
+                    <a href="https://t.me/ResiNode" target="_blank" class="inline-flex items-center gap-2 btn-primary px-8 py-3">
+                        <i class="fab fa-telegram-plane"></i> Contact via Telegram
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center md:text-left flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="text-slate-900 dark:text-white font-bold text-lg">
+                Resi<span class="text-brand-600 dark:text-brand-500">Node</span>
+            </div>
+            <div class="text-slate-500 text-sm">
+                &copy; 2026 ResiNode.me - Premium Residential VPS Provider. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        function switchPage(pageId) {
+            document.querySelectorAll('.page-view').forEach(page => {
+                page.classList.add('hidden-section');
+            });
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+            });
+
+            const target = document.getElementById(pageId);
+            if (target) {
+                target.classList.remove('hidden-section');
+            }
+            
+            const activeLink = document.getElementById('nav-' + pageId);
+            if (activeLink) {
+                activeLink.classList.add('active');
+            }
+            
+            window.scrollTo(0, 0);
+        }
+
+        function toggleProductTab(tabId) {
+            const tabs = ['us', 'uk', 'au', 'ca', 'fr', 'de', 'es', 'physical'];
+            
+            tabs.forEach(id => {
+                const btn = document.getElementById('tab-' + id);
+                const content = document.getElementById('product-' + id);
+                
+                if (id === tabId) {
+                    btn.classList.add('tab-active');
+                    btn.classList.remove('tab-inactive');
+                    content.classList.remove('hidden');
+                } else {
+                    btn.classList.add('tab-inactive');
+                    btn.classList.remove('tab-active');
+                    content.classList.add('hidden');
+                }
+            });
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        }
+
+        function toggleTheme() {
+            const html = document.documentElement;
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+                document.getElementById('theme-icon').classList.replace('fa-sun', 'fa-moon');
+            } else {
+                html.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+                document.getElementById('theme-icon').classList.replace('fa-moon', 'fa-sun');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            switchPage('home');
+            if (document.documentElement.classList.contains('dark')) {
+                document.getElementById('theme-icon').classList.replace('fa-moon', 'fa-sun');
+            }
+        });
+    </script>
+</body>
+</html>
